@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7dda83bb-ad24-41c9-a21b-54182e0a1758" name="Default" comment="">
       <change type="DELETED" beforePath="W:\GitHub\proasense-adapter-file\.idea\workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
     </list>
     <ignored path="proasense-adapter-file.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -304,7 +303,13 @@
       <option name="project" value="LOCAL" />
       <updated>1437746167831</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Deleted workspace.xml from .idea folder.">
+      <created>1437746277279</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1437746277279</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -341,11 +346,16 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial implementation of Montrac adapter." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial implementation of Montrac adapter." />
+    <MESSAGE value="Deleted workspace.xml from .idea folder." />
+    <option name="LAST_COMMIT_MESSAGE" value="Deleted workspace.xml from .idea folder." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pom.xml">
