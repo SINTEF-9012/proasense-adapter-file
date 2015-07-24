@@ -45,7 +45,7 @@ public abstract class WatchDirectory extends AbstractBaseAdapter{
         keys.put(key, dir);
     }
 
-    public void scanDirectory(String path) throws IOException, InterruptedException {
+    void scanDirectory(String path) throws IOException, InterruptedException {
 
         watcher = FileSystems.getDefault().newWatchService();
 
