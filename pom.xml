@@ -12,7 +12,6 @@
     <repositories>
         <repository>
             <id>archiva.public</id>
-
             <name>Nissatech Public Repository</name>
             <url>http://maven.nissatech.com/repository/public/</url>
         </repository>
