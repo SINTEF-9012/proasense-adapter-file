@@ -39,6 +39,9 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         String values[] = scanner.nextLine().split(",");
 
+        // Convert the time from the event file to a long timestamp
+        // Read it as a Date object
+        // Convert to long
         long timestamp = new Timestamp(System.currentTimeMillis()).getTime();
         System.out.println("timestamp er "+timestamp);
 
