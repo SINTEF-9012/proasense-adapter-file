@@ -1,8 +1,9 @@
 package net.modelbased.proasense.adapter.montrac;
 
+import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.VariableType;
-import net.modelbased.proasense.adapter.abstractFile.WatchDirectory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,14 +16,14 @@ import java.util.Scanner;
 /**
  * Created by shahzad on 18.07.15.
  */
-public class PathClass extends WatchDirectory {
+public class MontracFileAdapter extends AbstractFileAdapter {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        new PathClass(args[1]);
+        new MontracFileAdapter(args[1]);
     }
 
-    PathClass(String path) throws IOException, InterruptedException {
+    MontracFileAdapter(String path) throws IOException, InterruptedException {
 
         scanDirectory(path);
     }

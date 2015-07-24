@@ -1,6 +1,6 @@
-package net.modelbased.proasense.adapter.abstractFile;
+package net.modelbased.proasense.adapter.file;
 
-import net.modelbased.proasense.adapter.AbstractBaseAdapter;
+import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,19 +9,23 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 /**
  * Created by shahzad on 18.07.15.
  */
-public abstract class WatchDirectory extends AbstractBaseAdapter{
+public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
+    protected FileConsumerInput inputPort;
 
     WatchService watcher;
 
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
 
-    protected WatchDirectory() {
+    protected AbstractFileAdapter() {
 
         keys = new HashMap<WatchKey,Path>();
     }
@@ -45,7 +49,7 @@ public abstract class WatchDirectory extends AbstractBaseAdapter{
         keys.put(key, dir);
     }
 
-    void scanDirectory(String path) throws IOException, InterruptedException {
+    protected void scanDirectory(String path) throws IOException, InterruptedException {
 
         watcher = FileSystems.getDefault().newWatchService();
 

@@ -2,11 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7dda83bb-ad24-41c9-a21b-54182e0a1758" name="Default" comment="">
-      <change type="DELETED" beforePath="W:\GitHub\proasense-adapter-file\.idea\workspace.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="W:\GitHub\proasense-adapter-file\file-base\src\main\java\net\modelbased\proasense\adapter\AbstractBaseAdapter.java" afterPath="" />
+      <change type="DELETED" beforePath="W:\GitHub\proasense-adapter-file\file-base\src\main\java\net\modelbased\proasense\adapter\KafkaProducerOutput.java" afterPath="" />
+      <change type="DELETED" beforePath="W:\GitHub\proasense-adapter-file\file-montrac\src\main\java\net\modelbased\proasense\adapter\montrac\WatchDir.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/file-base/pom.xml" afterPath="$PROJECT_DIR$/file-base/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/file-montrac/pom.xml" afterPath="$PROJECT_DIR$/file-montrac/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="W:\GitHub\proasense-adapter-file\file-montrac\src\main\java\net\modelbased\proasense\adapter\abstractFile\WatchDirectory.java" afterPath="$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/AbstractFileAdapter.java" />
+      <change type="MOVED" beforePath="W:\GitHub\proasense-adapter-file\file-montrac\src\main\java\net\modelbased\proasense\adapter\montrac\PathClass.java" afterPath="$PROJECT_DIR$/file-montrac/src/main/java/net/modelbased/proasense/adapter/montrac/MontracFileAdapter.java" />
     </list>
     <ignored path="proasense-adapter-file.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path="$PROJECT_DIR$/file-montrac/target/" />
+    <ignored path="$PROJECT_DIR$/file-base/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,21 +34,109 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.21393998">
+              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-base/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-montrac/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09874153">
+            <state vertical-scroll-proportion="0.0">
               <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractFileAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/AbstractFileAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileConsumerInput.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/FileConsumerInput.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#993#1281#0" expanded="false" />
+                <element signature="e#1280#1281#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MontracFileAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-montrac/src/main/java/net/modelbased/proasense/adapter/montrac/MontracFileAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="file-montrac.iml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-montrac/file-montrac.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="adapter.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-base/src/main/resources/adapter.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="32" column="48" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="adapter.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/file-montrac/src/main/resources/adapter.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -58,8 +156,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/file-base/src/main/java/abstractFile/PathClass.java" />
+        <option value="$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/AbstractWatchDirectoryAdapter.java" />
+        <option value="$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/FileConsumerInput.java" />
+        <option value="$PROJECT_DIR$/file-base/pom.xml" />
+        <option value="$PROJECT_DIR$/file-base/src/main/resources/adapter.properties" />
+        <option value="$PROJECT_DIR$/file-montrac/src/main/java/net/modelbased/proasense/adapter/montrac/MontracFileAdapter.java" />
+        <option value="$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/AbstractFileAdapter.java" />
+        <option value="$PROJECT_DIR$/file-montrac/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -68,6 +173,11 @@
       <MavenGeneralSettings>
         <option name="mavenHome" value="Bundled (Maven 3)" />
       </MavenGeneralSettings>
+    </option>
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
     </option>
   </component>
   <component name="NamedScopeManager">
@@ -111,6 +221,10 @@
               <option name="myItemId" value="proasense-adapter-file" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -134,6 +248,16 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../proasense-adapter-oracle" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="W:\GitHub\proasense-adapter-file\file-montrac\src\main\resources" />
+      <recent name="W:\GitHub\proasense-adapter-file\file-base\src\main\resources" />
+      <recent name="W:\GitHub\proasense-adapter-file\file-base\src\main\java" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.modelbased.proasense.adapter.file" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -301,31 +425,7 @@
       <option name="project" value="LOCAL" />
       <updated>1437746167831</updated>
     </task>
-    <task id="LOCAL-00002" summary="Deleted workspace.xml from .idea folder.">
-      <created>1437746277279</created>
-      <option name="number" value="00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1437746277279</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Deleted workspace.xml from .idea folder.">
-      <created>1437746347247</created>
-      <option name="number" value="00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1437746347247</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Deleted workspace.xml from .idea folder.">
-      <created>1437746392817</created>
-      <option name="number" value="00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1437746392817</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Deleted workspace.xml from .idea folder.">
-      <created>1437746431364</created>
-      <option name="number" value="00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1437746431364</updated>
-    </task>
-    <option name="localTasksCounter" value="6" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -362,8 +462,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial implementation of Montrac adapter." />
-    <MESSAGE value="Deleted workspace.xml from .idea folder." />
-    <option name="LAST_COMMIT_MESSAGE" value="Deleted workspace.xml from .idea folder." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial implementation of Montrac adapter." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -374,18 +473,90 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/FileConsumerInput.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09874153">
-          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#993#1281#0" expanded="false" />
+            <element signature="e#1280#1281#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-montrac/file-montrac.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-base/src/main/resources/adapter.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="48" selection-start-line="32" selection-start-column="48" selection-end-line="32" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-montrac/src/main/resources/adapter.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-base/src/main/java/net/modelbased/proasense/adapter/file/AbstractFileAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-montrac/src/main/java/net/modelbased/proasense/adapter/montrac/MontracFileAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-base/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/file-montrac/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21393998">
+          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding />
         </state>
       </provider>
