@@ -28,10 +28,11 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected AbstractFileAdapter() {
 
         keys = new HashMap<WatchKey,Path>();
+        this.inputPort = new FileConsumerInput();
     }
 
     private void registerAll(final Path start) throws IOException {
-        // register directory and sub-directories
+
         System.out.println("Traversing all directories..");
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
             @Override
@@ -49,16 +50,14 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         keys.put(key, dir);
     }
 
-    protected void scanDirectory(String path) throws IOException, InterruptedException {
+    protected void scanDirectory(String path, int delay) throws IOException, InterruptedException {
 
         watcher = FileSystems.getDefault().newWatchService();
 
         Path directoryName = null;
         Path dir = Paths.get(path);
-        //dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-        registerAll(dir);
 
-        System.out.println("er i path");
+        registerAll(dir);
 
         for(;;) {
             WatchKey key;
@@ -69,7 +68,6 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 return;
             }
 
-//            System.out.println("er i while");
 
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent.Kind kind = event.kind();
@@ -79,26 +77,19 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 Path directory;
 
                 if(filename != null) {
-                  //  System.out.println("filename != null.");
+
                     directory = dir.resolve(filename);
                 }else{
                     continue;
                 }
 
-               // System.out.println("filename er "+filename);
                 if (kind == OVERFLOW) {
-               //     System.out.println("fikk en overflow. ");
+
                     continue;
                 }else if (kind == ENTRY_MODIFY) {
 
-                  //  System.out.println(kind.name() + " for path/directory " + directory);
-
                 }else if (kind == ENTRY_CREATE){
 
-                    System.out.println(kind.name() + " for path/directory " + directory);
-                    //  System.out.println("suffix length er "+suffix[1]);
-                    System.out.println(kind.name() + " for path/directory " + directory);
-                   // System.out.println("filnavn er" + filename);
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && (suffix[1].endsWith("evt"))){
                         System.out.println("Laget fil.");
@@ -108,10 +99,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
                         directoryName = filename;
                         registerAll(directory);
-                     //   System.out.println("Laget fil og venter i 6 sec.");
-                        Thread.sleep(6000);
-                        // traverseDirectories(directory.toString());
-                      //  System.out.println("Ny mappe er laget på lokajson."+directory);
+
+                        Thread.sleep(delay);
                     }
 
                 }else if (kind == ENTRY_DELETE){
@@ -123,7 +112,6 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
             boolean valid = key.reset();
             if (!valid) {
-                System.out.println("ble ikke valid "+valid);
                 keys.remove(key);
 
                 // all directories are inaccessible
@@ -135,6 +123,5 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     }
 
 
-    int i = 0;
     public abstract void convertToSimpleEvent(String filePath)throws FileNotFoundException;
 }

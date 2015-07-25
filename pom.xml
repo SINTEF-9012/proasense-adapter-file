@@ -29,6 +29,7 @@
     </repositories>
 
     <dependencies>
+
         <dependency>
             <groupId>eu.proasense.internal</groupId>
             <artifactId>thrift-messages</artifactId>
@@ -60,6 +61,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.1</version>
@@ -75,6 +81,7 @@
             <artifactId>kafka-clients</artifactId>
             <version>0.8.2.0</version>
         </dependency>
+
     </dependencies>
 
     <build>
