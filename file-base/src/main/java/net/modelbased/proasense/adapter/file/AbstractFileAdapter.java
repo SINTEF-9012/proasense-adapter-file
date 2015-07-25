@@ -24,11 +24,16 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
+    protected String rootDirectoryPath;
+    protected int delayValue;
 
     protected AbstractFileAdapter() {
 
         keys = new HashMap<WatchKey,Path>();
         this.inputPort = new FileConsumerInput();
+        rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.folder.root");
+        delayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.time.delay"));
+        inputPort = new FileConsumerInput();
     }
 
     private void registerAll(final Path start) throws IOException {

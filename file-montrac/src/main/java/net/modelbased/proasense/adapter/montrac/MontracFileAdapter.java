@@ -24,7 +24,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
     MontracFileAdapter() throws IOException, InterruptedException {
 
-        scanDirectory(inputPort.rootDirectoryPath, inputPort.delayValue);
+        scanDirectory(rootDirectoryPath, delayValue);
     }
 
 
@@ -80,10 +80,6 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         complexValue.setType(VariableType.STRING);
         properties.put("rightPiece", complexValue);
         System.out.println("rightPiece er = " + rightPiece[1]);
-
-        SimpleEvent simpleEvent = new SimpleEvent();
-        simpleEvent.sensorId = sensorId;
-        simpleEvent.timestamp = timestamp;
 
         SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
         this.outputPort.publishSimpleEvent(event);
