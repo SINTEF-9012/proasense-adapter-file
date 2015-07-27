@@ -1,6 +1,7 @@
 package net.modelbased.proasense.adapter.file;
 
 import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
+import org.apache.log4j.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,10 +10,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * Created by shahzad on 18.07.15.
@@ -26,6 +24,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     private boolean trace = false;
     protected String rootDirectoryPath;
     protected int delayValue;
+    public final static Logger logger = Logger.getLogger(AbstractFileAdapter.class);
 
     protected AbstractFileAdapter() {
 
@@ -38,7 +37,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
     private void registerAll(final Path start) throws IOException {
 
-        System.out.println("Traversing all directories..");
+        logger.debug("Traversing all directories..");
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
@@ -47,7 +46,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 return FileVisitResult.CONTINUE;
             }
         });
-        System.out.println("Done.");
+        logger.debug("Done.");
     }
 
     private void register(Path dir) throws IOException {
@@ -97,12 +96,13 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && (suffix[1].endsWith("evt"))){
-                        System.out.println("Laget fil.");
+
                         String adress = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
                         convertToSimpleEvent(adress);
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
                         directoryName = filename;
+                        logger.debug("Made a file.");
                         registerAll(directory);
 
                         Thread.sleep(delay);
@@ -110,7 +110,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
                 }else if (kind == ENTRY_DELETE){
 
-                    System.out.println(kind.name() + " " + directory);
+                    logger.debug(kind.name() + " " + directory);
 
                 }
             }

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-2015 SINTEF
  *
- *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Brian Elvesï¿½ter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +18,24 @@
  */
 package net.modelbased.proasense.adapter.montrac;
 
-import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
-
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
+import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.log4j.Logger;
-
 
 public class MontracFileAdapter extends AbstractFileAdapter {
-    final static Logger logger = Logger.getLogger(MontracFileAdapter.class);
+   // final static Logger logger = Logger.getLogger(MontracFileAdapter.class);
 
 
     public MontracFileAdapter() throws IOException, InterruptedException {
@@ -49,12 +44,15 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
 
     public void convertToSimpleEvent(String filePath) throws FileNotFoundException {
-        System.out.println("er i readFiles(); " + filePath);
+        logger.debug("er i readFiles(); " + filePath);
         File file = new File(filePath);
         Scanner scanner = new Scanner(file);
         Map<String, ComplexValue> properties = new HashMap<String, ComplexValue>();
 
-        String values[] = scanner.nextLine().split(",");
+        String date = scanner.next() + " " +scanner.next();
+        String removeWhtespace = scanner.nextLine().replace(" ","");
+
+        String values[] = removeWhtespace.split(",");
 
         // Convert the time from the event file to a long timestamp
         // Read it as a Date object
@@ -64,46 +62,46 @@ public class MontracFileAdapter extends AbstractFileAdapter {
             Date parsedDate = null;
 
         try {
-            parsedDate = dateFormat.parse(values[0]);
+            parsedDate = dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         long timestamp = parsedDate.getTime();
 
-        String sensorId = values[1];
+        String sensorId = values[0];
 
-        System.out.println("timestamp er  " + timestamp);
-        System.out.println("sensorId er  " + sensorId);
+        logger.debug("timestamp er  " + timestamp);
+        logger.debug("sensorId er  " + sensorId);
 
         ComplexValue complexValue = new ComplexValue();
-        complexValue.setValue(values[2]);
+        complexValue.setValue(values[1]);
         complexValue.setType(VariableType.STRING);
         properties.put("event", complexValue);
-        System.out.println("event = " + values[2]);
+        logger.debug("event = " + values[1]);
+
 
         complexValue = new ComplexValue();
-        complexValue.setValue(values[3]);
+        complexValue.setValue(values[2]);
         complexValue.setType(VariableType.LONG);
         properties.put("shuttle", complexValue);
-        System.out.println("shuttle er = " + values[3]);
+        logger.debug("shuttle er = " + values[2]);
 
-        String leftPiece[] = values[4].split("=");
+        String leftPiece[] = values[3].split("=");
 
         complexValue = new ComplexValue();
         complexValue.setValue(leftPiece[1]);
-        complexValue.setType(VariableType.STRING);
+        complexValue.setType(VariableType.BOOLEAN);
         properties.put("leftPiece", complexValue);
-        System.out.println("leftpiece er = " + leftPiece[1]);
+        logger.debug("leftpiece er = " + leftPiece[0]);
 
-        String rightPiece[] = values[5].split("=");
+        String rightPiece[] = values[4].split("=");
 
         complexValue = new ComplexValue();
         complexValue.setValue(rightPiece[1]);
-        complexValue.setType(VariableType.STRING);
+        complexValue.setType(VariableType.BOOLEAN);
         properties.put("rightPiece", complexValue);
-        System.out.println("rightPiece er = " + rightPiece[1]);
-        logger.debug("rightPiece er = " + rightPiece[1]);
+        logger.debug("rightPiece er = " + rightPiece[0]);
 
         SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
         logger.debug("SimpleEvent = " + event.toString());
