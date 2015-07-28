@@ -35,8 +35,6 @@ import java.util.Scanner;
 
 
 public class MontracFileAdapter extends AbstractFileAdapter {
-   // final static Logger logger = Logger.getLogger(MontracFileAdapter.class);
-
 
     public MontracFileAdapter() throws IOException, InterruptedException {
         scanDirectory(rootDirectoryPath, delayValue);
@@ -44,22 +42,21 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
 
     public void convertToSimpleEvent(String filePath) throws FileNotFoundException {
-        logger.debug("er i readFiles(); " + filePath);
+        logger.debug("Processing file = " + filePath);
         File file = new File(filePath);
         Scanner scanner = new Scanner(file);
         Map<String, ComplexValue> properties = new HashMap<String, ComplexValue>();
 
         String date = scanner.next() + " " +scanner.next();
-        String removeWhtespace = scanner.nextLine().replace(" ","");
+        String removeWhitespace = scanner.nextLine().replace(" ", "");
 
-        String values[] = removeWhtespace.split(",");
+        String values[] = removeWhitespace.split(",");
 
         // Convert the time from the event file to a long timestamp
         // Read it as a Date object
         // Convert to long
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            Date parsedDate = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date parsedDate = null;
 
         try {
             parsedDate = dateFormat.parse(date);
@@ -71,8 +68,8 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         String sensorId = values[0];
 
-        logger.debug("timestamp er  " + timestamp);
-        logger.debug("sensorId er  " + sensorId);
+        logger.debug("timestamp = " + timestamp);
+        logger.debug("sensorId = " + sensorId);
 
         ComplexValue complexValue = new ComplexValue();
         complexValue.setValue(values[1]);
@@ -85,7 +82,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         complexValue.setValue(values[2]);
         complexValue.setType(VariableType.LONG);
         properties.put("shuttle", complexValue);
-        logger.debug("shuttle er = " + values[2]);
+        logger.debug("shuttle = " + values[2]);
 
         String leftPiece[] = values[3].split("=");
 
@@ -93,7 +90,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         complexValue.setValue(leftPiece[1]);
         complexValue.setType(VariableType.BOOLEAN);
         properties.put("leftPiece", complexValue);
-        logger.debug("leftpiece er = " + leftPiece[0]);
+        logger.debug("leftpiece = " + leftPiece[1]);
 
         String rightPiece[] = values[4].split("=");
 
@@ -101,7 +98,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         complexValue.setValue(rightPiece[1]);
         complexValue.setType(VariableType.BOOLEAN);
         properties.put("rightPiece", complexValue);
-        logger.debug("rightPiece er = " + rightPiece[0]);
+        logger.debug("rightPiece = " + rightPiece[1]);
 
         SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
         logger.debug("SimpleEvent = " + event.toString());
@@ -112,4 +109,5 @@ public class MontracFileAdapter extends AbstractFileAdapter {
     public static void main(String[] args) throws IOException, InterruptedException {
         new MontracFileAdapter();
     }
+
 }
