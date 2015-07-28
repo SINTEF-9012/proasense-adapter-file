@@ -93,7 +93,9 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 }else if (kind == ENTRY_MODIFY) {
 
                 }else if (kind == ENTRY_CREATE){
-
+                    logger.debug("delay begin");
+                    Thread.sleep(delay);
+                    logger.debug("delay end");
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && (suffix[1].endsWith("evt"))){
 
