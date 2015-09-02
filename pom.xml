@@ -9,7 +9,9 @@
 
     <modules>
         <module>file-base</module>
+        <module>file-materialmovement</module>
         <module>file-montrac</module>
+        <module>file-productionplan</module>
     </modules>
 
     <name>proasense-adapter-base Maven Webapp</name>
