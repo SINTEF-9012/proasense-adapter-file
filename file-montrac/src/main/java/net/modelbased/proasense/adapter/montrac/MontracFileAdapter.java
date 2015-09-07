@@ -51,7 +51,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         String removeWhitespace = scanner.nextLine().replace(" ", "");
 
         String values[] = removeWhitespace.split(",");
-
+        System.out.println(values.length);
         // Convert the time from the event file to a long timestamp
         // Read it as a Date object
         // Convert to long
@@ -66,17 +66,22 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         long timestamp = parsedDate.getTime();
 
-        String sensorId = values[0];
+        String sensorId = "montrac";
 
         logger.debug("timestamp = " + timestamp);
         logger.debug("sensorId = " + sensorId);
 
         ComplexValue complexValue = new ComplexValue();
+        complexValue.setValue(values[0]);
+        complexValue.setType(VariableType.STRING);
+        properties.put("location", complexValue);
+        logger.debug("location = " + values[0]);
+
+        complexValue = new ComplexValue();
         complexValue.setValue(values[1]);
         complexValue.setType(VariableType.STRING);
         properties.put("event", complexValue);
         logger.debug("event = " + values[1]);
-
 
         complexValue = new ComplexValue();
         complexValue.setValue(values[2]);
@@ -103,6 +108,8 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
         logger.debug("SimpleEvent = " + event.toString());
         this.outputPort.publishSimpleEvent(event);
+
+        System.out.println(event.toString());
     }
 
 
