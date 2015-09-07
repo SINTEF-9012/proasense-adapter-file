@@ -106,10 +106,8 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         logger.debug("rightPiece = " + rightPiece[1]);
 
         SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
-        logger.debug("SimpleEvent = " + event.toString());
         this.outputPort.publishSimpleEvent(event);
-
-        System.out.println(event.toString());
+        logger.debug("SimpleEvent = " + event.toString());
     }
 
 
