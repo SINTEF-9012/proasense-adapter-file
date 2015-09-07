@@ -51,7 +51,6 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         String removeWhitespace = scanner.nextLine().replace(" ", "");
 
         String values[] = removeWhitespace.split(",");
-        System.out.println(values.length);
         // Convert the time from the event file to a long timestamp
         // Read it as a Date object
         // Convert to long
