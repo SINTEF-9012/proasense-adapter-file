@@ -29,7 +29,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>net.modelbased.proasense.MainApp</mainClass>
+                    <mainClass>net.modelbased.proasense.adapter.montrac.MontracFileAdapter</mainClass>
                     <includePluginDependencies>false</includePluginDependencies>
                 </configuration>
             </plugin>
