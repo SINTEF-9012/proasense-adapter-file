@@ -20,5 +20,21 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    
+
+    <build>
+        <plugins>
+            <!-- Allows the example to be run via 'mvn compile exec:java' -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <mainClass>net.modelbased.proasense.MainApp</mainClass>
+                    <includePluginDependencies>false</includePluginDependencies>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>
