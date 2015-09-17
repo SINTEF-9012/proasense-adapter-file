@@ -24,10 +24,12 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     private boolean trace = false;
     protected String rootDirectoryPath;
     protected int delayValue;
+    public String sensorId;
     public final static Logger logger = Logger.getLogger(AbstractFileAdapter.class);
 
     protected AbstractFileAdapter() {
 
+        sensorId = adapterProperties.getProperty("proasense.adapter.file.sensor.id");
         keys = new HashMap<WatchKey,Path>();
         this.inputPort = new FileConsumerInput();
         rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.folder.root");
@@ -97,9 +99,9 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     Thread.sleep(delay);
                     logger.debug("delay end");
                     String suffix[] = (directory.toString()).split("\\.");
-                    if((suffix.length > 1) && (suffix[1].endsWith("evt"))){
-
-                        String adress = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
+                    if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
+                    System.out.println("suffix er "+suffix[1]);
+                        String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
                         convertToSimpleEvent(adress);
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
@@ -130,5 +132,5 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     }
 
 
-    public abstract void convertToSimpleEvent(String filePath)throws FileNotFoundException;
+    public abstract void convertToSimpleEvent(String filePath) throws IOException;
 }
