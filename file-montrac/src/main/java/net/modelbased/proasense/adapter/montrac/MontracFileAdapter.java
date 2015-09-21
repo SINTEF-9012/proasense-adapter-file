@@ -37,7 +37,11 @@ import java.util.Scanner;
 public class MontracFileAdapter extends AbstractFileAdapter {
 
     public MontracFileAdapter() throws IOException, InterruptedException {
-        scanDirectory(rootDirectoryPath, delayValue);
+        try {
+            scanDirectory(rootDirectoryPath, delayValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 

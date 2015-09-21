@@ -32,6 +32,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -50,17 +54,21 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
     public ProductionPlanFileAdapter() throws IOException, InterruptedException {
         System.out.println("path er "+rootDirectoryPath);
-        scanDirectory(rootDirectoryPath, delayValue);
+        try {
+            scanDirectory(rootDirectoryPath, delayValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public void convertToSimpleEvent(String filePath) throws IOException {
+    public void convertToSimpleEvent(String filePath) throws IOException, ParseException {
         System.out.println("converToSimpleEvent "+filePath);
         checkExcelRows(filePath);
     }
 
 
-    public void checkExcelRows(String filePath) throws IOException {
+    public void checkExcelRows(String filePath) throws IOException, ParseException {
         System.out.println("filepath er "+filePath);
         String path = "Books.xlsx";
         FileInputStream inputStream = new FileInputStream(new File(filePath));
@@ -101,7 +109,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     }
 
     int cnt = 0;
-    void splitAndPublichEvents(String rows){
+    void splitAndPublichEvents(String rows) throws ParseException {
 
         if(cnt == 0){
             cnt++;
@@ -112,13 +120,24 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         String plant = rowValue[1];
         String materials = rowValue[2];
 
+        Date date = new Date();
         String receipt_requirement_date = rowValue[3];
-      //  String longDate = convertDate(receipt_requirement_date);
+        String modifiedDate = convertDate(receipt_requirement_date);
+
+        String longDate = "";
+
+        if(modifiedDate.equals("0")){
+            longDate = modifiedDate;
+        }else{
+            DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            Date date1 = format.parse(modifiedDate);
+            longDate = String.valueOf(date1.getTime());
+        }
 
         String quantity = rowValue[4];
         String company_code = rowValue[5];
         String Scheduled_finish = rowValue[6];
-        Date date = new Date();
+
 
         SimpleEvent simpleEvent = new SimpleEvent();
 
@@ -136,7 +155,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         simpleEvent.putToEventProperties("materials", complexValue);
 
         complexValue = new ComplexValue();
-        complexValue.setValue(receipt_requirement_date);
+        complexValue.setValue(longDate);
         complexValue.setType(VariableType.LONG);
         simpleEvent.putToEventProperties("plannedDate", complexValue);
 
@@ -151,10 +170,14 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
         String convertDate(String date){
             System.out.println(date);
-           // if(date.equals("0.0"))return "0";
+            if(date.equals("0.0"))return "0";
+            String[] dateSplit = date.split("\\.");
+            String newFormat = dateSplit[0]+""+dateSplit[1].substring(0,7);
+            char[] modifyDate = newFormat.toCharArray();
+            System.out.println(modifyDate[3]);
+            String finalDate = modifyDate[0]+""+modifyDate[1]+""+modifyDate[2]+""+modifyDate[3]+"/"+modifyDate[4]+""+modifyDate[5]+""
+                    +"/"+modifyDate[6]+""+modifyDate[7];
 
-          //  String newDate = date.substring(0,4)+"/"+date.substring(4,6)+"/"+date.substring(6,8);
-           // System.out.println(newDate);
-            return "";
+            return finalDate;
         }
     }

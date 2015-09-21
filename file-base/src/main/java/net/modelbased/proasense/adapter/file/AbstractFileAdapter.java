@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         keys.put(key, dir);
     }
 
-    protected void scanDirectory(String path, int delay) throws IOException, InterruptedException {
+    protected void scanDirectory(String path, int delay) throws IOException, InterruptedException, ParseException {
 
         watcher = FileSystems.getDefault().newWatchService();
 
@@ -102,7 +103,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
                     System.out.println("suffix er "+suffix[1]);
                         String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
-                        convertToSimpleEvent(adress);
+                        convertToSimpleEvent    (adress);
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
                         directoryName = filename;
@@ -132,5 +133,5 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     }
 
 
-    public abstract void convertToSimpleEvent(String filePath) throws IOException;
+    public abstract void convertToSimpleEvent(String filePath) throws IOException, ParseException;
 }
