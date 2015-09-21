@@ -53,7 +53,6 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     }
 
     public ProductionPlanFileAdapter() throws IOException, InterruptedException {
-        System.out.println("path er "+rootDirectoryPath);
         try {
             scanDirectory(rootDirectoryPath, delayValue);
         } catch (ParseException e) {
@@ -63,13 +62,11 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     public void convertToSimpleEvent(String filePath) throws IOException, ParseException {
-        System.out.println("converToSimpleEvent "+filePath);
         checkExcelRows(filePath);
     }
 
 
     public void checkExcelRows(String filePath) throws IOException, ParseException {
-        System.out.println("filepath er "+filePath);
         String path = "Books.xlsx";
         FileInputStream inputStream = new FileInputStream(new File(filePath));
 
@@ -101,7 +98,6 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
             }
             i++;
-           // System.out.println(row);
             splitAndPublichEvents(row);
         }
         workbook.close();
@@ -165,16 +161,14 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         simpleEvent.putToEventProperties("quantity", complexValue);
 
         outputPort.publishSimpleEvent(simpleEvent);
-        System.out.println(simpleEvent.toString());
+        logger.debug(simpleEvent.toString());
         }
 
         String convertDate(String date){
-            System.out.println(date);
             if(date.equals("0.0"))return "0";
             String[] dateSplit = date.split("\\.");
             String newFormat = dateSplit[0]+""+dateSplit[1].substring(0,7);
             char[] modifyDate = newFormat.toCharArray();
-            System.out.println(modifyDate[3]);
             String finalDate = modifyDate[0]+""+modifyDate[1]+""+modifyDate[2]+""+modifyDate[3]+"/"+modifyDate[4]+""+modifyDate[5]+""
                     +"/"+modifyDate[6]+""+modifyDate[7];
 
