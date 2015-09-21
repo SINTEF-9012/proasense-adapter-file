@@ -101,7 +101,6 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     logger.debug("delay end");
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
-                    System.out.println("suffix er "+suffix[1]);
                         String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
                         convertToSimpleEvent    (adress);
 
