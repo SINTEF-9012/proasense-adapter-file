@@ -31,10 +31,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 
 public class MaterialMovementFileAdapter extends AbstractFileAdapter {
+
 
     public static void main(String[] args) {
         try {
@@ -47,20 +51,21 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
     }
 
     public MaterialMovementFileAdapter() throws IOException, InterruptedException {
-        System.out.println("path er "+rootDirectoryPath);
-        scanDirectory(rootDirectoryPath, delayValue);
+        try {
+            scanDirectory(rootDirectoryPath, delayValue);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    public void convertToSimpleEvent(String filePath) throws IOException {
-        System.out.println("converToSimpleEvent "+filePath);
+    public void convertToSimpleEvent(String filePath) throws IOException, ParseException {
         checkExcelRows(filePath);
     }
 
 
-    public void checkExcelRows(String filePath) throws IOException {
-        System.out.println("filepath er "+filePath);
-        String path = "Books.xlsx";
+    public void checkExcelRows(String filePath) throws IOException, ParseException {
+
         FileInputStream inputStream = new FileInputStream(new File(filePath));
 
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -70,8 +75,8 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         while (iterator.hasNext()) {
             Row nextRow = iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
-           // String row = ""+i+",";
-           String row = "";
+            // String row = ""+i+",";
+            String row = "";
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
 
@@ -91,7 +96,6 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
 
             }
             i++;
-           // System.out.println(row);
             splitAndPublichEvents(row);
         }
         workbook.close();
@@ -99,7 +103,7 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
     }
 
     int cnt = 0;
-    void splitAndPublichEvents(String rows){
+    void splitAndPublichEvents(String rows) throws ParseException {
 
         if(cnt == 0){
             cnt++;
@@ -110,13 +114,24 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         String plant = rowValue[1];
         String materials = rowValue[2];
 
+        Date date = new Date();
         String receipt_requirement_date = rowValue[3];
-      //  String longDate = convertDate(receipt_requirement_date);
+        String modifiedDate = convertDate(receipt_requirement_date);
+
+        String longDate = "";
+
+        if(modifiedDate.equals("0")){
+            longDate = modifiedDate;
+        }else{
+            DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            Date date1 = format.parse(modifiedDate);
+            longDate = String.valueOf(date1.getTime());
+        }
 
         String quantity = rowValue[4];
         String company_code = rowValue[5];
         String Scheduled_finish = rowValue[6];
-        Date date = new Date();
+
 
         SimpleEvent simpleEvent = new SimpleEvent();
 
@@ -134,7 +149,7 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         simpleEvent.putToEventProperties("materials", complexValue);
 
         complexValue = new ComplexValue();
-        complexValue.setValue(receipt_requirement_date);
+        complexValue.setValue(longDate);
         complexValue.setType(VariableType.LONG);
         simpleEvent.putToEventProperties("plannedDate", complexValue);
 
@@ -144,15 +159,17 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         simpleEvent.putToEventProperties("quantity", complexValue);
 
         outputPort.publishSimpleEvent(simpleEvent);
-        System.out.println(simpleEvent.toString());
-        }
+        logger.debug(simpleEvent.toString());
+    }
 
-        String convertDate(String date){
-            System.out.println(date);
-           // if(date.equals("0.0"))return "0";
+    String convertDate(String date){
+        if(date.equals("0.0"))return "0";
+        String[] dateSplit = date.split("\\.");
+        String newFormat = dateSplit[0]+""+dateSplit[1].substring(0,7);
+        char[] modifyDate = newFormat.toCharArray();
+        String finalDate = modifyDate[0]+""+modifyDate[1]+""+modifyDate[2]+""+modifyDate[3]+"/"+modifyDate[4]+""+modifyDate[5]+""
+                +"/"+modifyDate[6]+""+modifyDate[7];
 
-          //  String newDate = date.substring(0,4)+"/"+date.substring(4,6)+"/"+date.substring(6,8);
-           // System.out.println(newDate);
-            return "";
-        }
+        return finalDate;
+    }
     }

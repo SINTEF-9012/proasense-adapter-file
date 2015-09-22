@@ -98,7 +98,11 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
             }
             i++;
-            splitAndPublichEvents(row);
+            if(row.startsWith("MRP element")){
+                continue;
+            }else{
+                splitAndPublichEvents(row);
+            }
         }
         workbook.close();
         inputStream.close();

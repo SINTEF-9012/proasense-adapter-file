@@ -55,9 +55,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         String removeWhitespace = scanner.nextLine().replace(" ", "");
 
         String values[] = removeWhitespace.split(",");
-        // Convert the time from the event file to a long timestamp
-        // Read it as a Date object
-        // Convert to long
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date parsedDate = null;
 
@@ -69,7 +67,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         long timestamp = parsedDate.getTime();
 
-        String sensorId = "montrac";
+      //  String sensorId = "montrac";
 
         logger.debug("timestamp = " + timestamp);
         logger.debug("sensorId = " + sensorId);
