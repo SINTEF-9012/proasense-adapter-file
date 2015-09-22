@@ -56,6 +56,11 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         String values[] = removeWhitespace.split(",");
 
+        if(values.length != 5){
+        warningMessage(filePath);
+            return;
+        }
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date parsedDate = null;
 
@@ -63,11 +68,11 @@ public class MontracFileAdapter extends AbstractFileAdapter {
             parsedDate = dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
+            System.out.println("Please check the dateformat for the file below "+e);
+            warningMessage(filePath);
         }
 
         long timestamp = parsedDate.getTime();
-
-      //  String sensorId = "montrac";
 
         logger.debug("timestamp = " + timestamp);
         logger.debug("sensorId = " + sensorId);
@@ -115,5 +120,4 @@ public class MontracFileAdapter extends AbstractFileAdapter {
     public static void main(String[] args) throws IOException, InterruptedException {
         new MontracFileAdapter();
     }
-
 }

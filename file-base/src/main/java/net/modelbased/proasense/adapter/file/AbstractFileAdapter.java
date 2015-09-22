@@ -102,7 +102,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
                         String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
-                        convertToSimpleEvent    (adress);
+                        convertToSimpleEvent(adress);
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
                         directoryName = filename;
@@ -110,6 +110,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         registerAll(directory);
 
                         Thread.sleep(delay);
+                    }else{
+                        System.out.println("File not recognized, suffix should be .evt or .xlsx.");
                     }
 
                 }else if (kind == ENTRY_DELETE){
@@ -122,13 +124,17 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
             boolean valid = key.reset();
             if (!valid) {
                 keys.remove(key);
-
-                // all directories are inaccessible
                 if (keys.isEmpty()) {
                     break;
                 }
             }
         }
+    }
+
+    public void warningMessage(String path){
+        System.out.println("File in path:");
+        System.out.println(path);
+        System.out.println("is corrupt, please check format of this file");
     }
 
 
