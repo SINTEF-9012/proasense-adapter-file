@@ -103,8 +103,13 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
                         String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
-                        chechFileLength(adress);
-                        convertToSimpleEvent(adress);
+
+                        if(directoryName == null){
+                            System.out.println("Please create a folder first and only then add files to it!");
+                        }else{
+                            chechFileLength(adress);
+                            convertToSimpleEvent(adress);
+                        }
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
                         directoryName = filename;
