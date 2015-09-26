@@ -67,7 +67,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     public void checkExcelRows(String filePath) throws IOException, ParseException {
-        String path = "Books.xlsx";
+
         FileInputStream inputStream = new FileInputStream(new File(filePath));
 
         Workbook workbook = new XSSFWorkbook(inputStream);

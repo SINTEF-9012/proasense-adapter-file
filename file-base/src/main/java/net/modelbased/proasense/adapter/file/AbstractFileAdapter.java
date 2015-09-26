@@ -3,6 +3,7 @@ package net.modelbased.proasense.adapter.file;
 import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
 import org.apache.log4j.Logger;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
@@ -102,6 +103,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
                         String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
+                        chechFileLength(adress);
                         convertToSimpleEvent(adress);
 
                     }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
@@ -136,7 +138,25 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         System.out.println(path);
         System.out.println("is corrupt, please check format of this file");
     }
+    int n = 0;
+    public void chechFileLength(String filePath){
+        n++;
+            File file = new File(filePath);
+            long prevFileSize = 0;
+            long currentFileSize = 1;
 
+        System.out.println("er i checkLength metoden, antall events er "+n+" currfileSize er "+currentFileSize);
+
+        while(prevFileSize != currentFileSize){
+            prevFileSize = currentFileSize;
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            currentFileSize = file.length();
+        }
+    }
 
     public abstract void convertToSimpleEvent(String filePath) throws IOException, ParseException;
 }
