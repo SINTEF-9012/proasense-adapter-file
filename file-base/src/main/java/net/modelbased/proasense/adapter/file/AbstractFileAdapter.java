@@ -23,7 +23,9 @@ import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.ParseException;
@@ -180,25 +182,45 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     public void checkFileLength(String filePath, int fileDelay) {
         eventsProcessed++;
 
-        File file = new File(filePath);
-        while (!file.exists()) {
-            file = new File(filePath);
+        try {
+            File file = new File(filePath);
+            while (!checkFileExists(file)) {
+                Thread.sleep(fileDelay);
+                file = new File(filePath);
+            }
+
+            long prevFileSize = 0;
+            long currentFileSize = 1;
+            while (prevFileSize != currentFileSize) {
+                prevFileSize = currentFileSize;
+                Thread.sleep(fileDelay);
+                currentFileSize = file.length();
+                logger.debug("prevFileSize = " + prevFileSize);
+                logger.debug("currentFileSize = " + currentFileSize);
+            }
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        long prevFileSize = 0;
-        long currentFileSize = 1;
-        while (prevFileSize != currentFileSize) {
-            prevFileSize = currentFileSize;
-            try {
-                Thread.sleep(fileDelay);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            currentFileSize = file.length();
-            logger.debug("prevFileSize = " + prevFileSize);
-            logger.debug("currentFileSize = " + currentFileSize);
-        }
         logger.debug("checkFileLength(): # events = " + eventsProcessed);
+    }
+
+
+    public static boolean checkFileExists(File file) {
+        try {
+            byte[] buffer = new byte[4];
+            InputStream is = new FileInputStream(file);
+            if (is.read(buffer) != buffer.length) {
+                // do something
+            }
+            is.close();
+            return true;
+        }
+        catch (java.io.IOException e) {
+            //
+        }
+        return false;
     }
 
 
