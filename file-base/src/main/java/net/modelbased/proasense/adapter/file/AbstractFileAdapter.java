@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
@@ -184,12 +185,12 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
         try {
             File file = new File(filePath);
-            while (!file.exists()) {
+            while (!checkFileExists(file)) {
                 Thread.sleep(fileDelay);
                 file = new File(filePath);
             }
 
-            long prevFileSize = 0;
+            long prevFileSize = -1;
             long currentFileSize = 0;
             while ((currentFileSize != 0) && (prevFileSize != currentFileSize)) {
                 prevFileSize = currentFileSize;
