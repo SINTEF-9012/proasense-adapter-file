@@ -187,7 +187,6 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
             File file = new File(filePath);
             while (!checkFileExists(file)) {
                 Thread.sleep(fileDelay);
-                file = new File(filePath);
             }
 
             long prevFileSize = -1;
@@ -199,8 +198,15 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 logger.debug("prevFileSize = " + prevFileSize);
                 logger.debug("currentFileSize = " + currentFileSize);
             }
+
+            InputStream is = new FileInputStream(file);
+            is.close();
         }
         catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
