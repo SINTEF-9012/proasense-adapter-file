@@ -42,22 +42,8 @@ import java.util.Iterator;
 
 public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
-    public static void main(String[] args) {
-        try {
-            new ProductionPlanFileAdapter();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public ProductionPlanFileAdapter() throws IOException, InterruptedException {
-        try {
-            scanDirectory(rootDirectoryPath, delayValue);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public ProductionPlanFileAdapter() {
     }
 
 
@@ -67,7 +53,6 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     public void checkExcelRows(String filePath) throws IOException, ParseException {
-
         FileInputStream inputStream = new FileInputStream(new File(filePath));
 
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -77,8 +62,8 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         while (iterator.hasNext()) {
             Row nextRow = iterator.next();
             Iterator<Cell> cellIterator = nextRow.cellIterator();
-           // String row = ""+i+",";
-           String row = "";
+            // String row = ""+i+",";
+            String row = "";
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
 
@@ -92,15 +77,15 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
                         break;
                 }
 
-                if(cellIterator.hasNext()){
-                    row+= ",";
+                if (cellIterator.hasNext()) {
+                    row += ",";
                 }
 
             }
             i++;
-            if(row.startsWith("MRP element")){
+            if (row.startsWith("MRP element")) {
                 continue;
-            }else{
+            } else {
                 splitAndPublichEvents(row);
             }
         }
@@ -108,10 +93,10 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         inputStream.close();
     }
 
+
     int cnt = 0;
     void splitAndPublichEvents(String rows) throws ParseException {
-
-        if(cnt == 0){
+        if (cnt == 0) {
             cnt++;
             return;
         }
@@ -126,9 +111,9 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
         String longDate = "";
 
-        if(modifiedDate.equals("0")){
+        if (modifiedDate.equals("0")) {
             longDate = modifiedDate;
-        }else{
+        } else {
             DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
             Date date1 = format.parse(modifiedDate);
             longDate = String.valueOf(date1.getTime());
@@ -166,16 +151,23 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
         outputPort.publishSimpleEvent(simpleEvent);
         logger.debug(simpleEvent.toString());
-        }
-
-        String convertDate(String date){
-            if(date.equals("0.0"))return "0";
-            String[] dateSplit = date.split("\\.");
-            String newFormat = dateSplit[0]+""+dateSplit[1].substring(0,7);
-            char[] modifyDate = newFormat.toCharArray();
-            String finalDate = modifyDate[0]+""+modifyDate[1]+""+modifyDate[2]+""+modifyDate[3]+"/"+modifyDate[4]+""+modifyDate[5]+""
-                    +"/"+modifyDate[6]+""+modifyDate[7];
-
-            return finalDate;
-        }
     }
+
+
+    String convertDate(String date) {
+        if (date.equals("0.0")) return "0";
+        String[] dateSplit = date.split("\\.");
+        String newFormat = dateSplit[0] + "" + dateSplit[1].substring(0, 7);
+        char[] modifyDate = newFormat.toCharArray();
+        String finalDate = modifyDate[0] + "" + modifyDate[1] + "" + modifyDate[2] + "" + modifyDate[3] + "/" + modifyDate[4] + "" + modifyDate[5] + ""
+                + "/" + modifyDate[6] + "" + modifyDate[7];
+
+        return finalDate;
+    }
+
+
+    public static void main(String[] args) {
+        new ProductionPlanFileAdapter();
+    }
+
+}

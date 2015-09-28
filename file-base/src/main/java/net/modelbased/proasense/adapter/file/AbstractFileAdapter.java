@@ -1,10 +1,28 @@
+/**
+ * Copyright (C) 2014-2015 SINTEF
+ *
+ *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Shahzad Karamat <shazad.karamat@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.modelbased.proasense.adapter.file;
 
 import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -14,34 +32,47 @@ import java.util.Map;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 
-/**
- * Created by shahzad on 18.07.15.
- */
+
 public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
+    public final static Logger logger = Logger.getLogger(AbstractFileAdapter.class);
+
     protected FileConsumerInput inputPort;
 
     WatchService watcher;
 
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
-    protected String rootDirectoryPath;
-    protected int delayValue;
     public String sensorId;
-    public final static Logger logger = Logger.getLogger(AbstractFileAdapter.class);
+    protected String rootDirectoryPath;
+    protected int directoryDelayValue;
+    protected int fileDelayValue;
+    private int eventsProcessed = 0;
+
 
     protected AbstractFileAdapter() {
+        // Adapter properties
+        sensorId = adapterProperties.getProperty("proasense.adapter.base.sensorid");
+        rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.root.directory");
+        directoryDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.directory"));
+        fileDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.file"));
 
-        sensorId = adapterProperties.getProperty("proasense.adapter.file.sensor.id");
         keys = new HashMap<WatchKey,Path>();
         this.inputPort = new FileConsumerInput();
-        rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.folder.root");
-        delayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.time.delay"));
-        inputPort = new FileConsumerInput();
+
+        try {
+            scanDirectory(rootDirectoryPath, directoryDelayValue, fileDelayValue);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void registerAll(final Path start) throws IOException {
 
-        logger.debug("Traversing all directories..");
+    private void registerAll(final Path start) throws IOException {
+        logger.debug("Traversing all directories...");
         Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
@@ -53,13 +84,14 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         logger.debug("Done.");
     }
 
+
     private void register(Path dir) throws IOException {
         WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
         keys.put(key, dir);
     }
 
-    protected void scanDirectory(String path, int delay) throws IOException, InterruptedException, ParseException {
 
+    protected void scanDirectory(String path, int directoryDelay, int fileDelay) throws IOException, InterruptedException, ParseException {
         watcher = FileSystems.getDefault().newWatchService();
 
         Path directoryName = null;
@@ -85,46 +117,45 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                 Path directory;
 
                 if(filename != null) {
-
                     directory = dir.resolve(filename);
                 }else{
                     continue;
                 }
 
                 if (kind == OVERFLOW) {
-
                     continue;
-                }else if (kind == ENTRY_MODIFY) {
-
-                }else if (kind == ENTRY_CREATE){
-                    logger.debug("delay begin");
-                    Thread.sleep(delay);
-                    logger.debug("delay end");
+                }
+                else if (kind == ENTRY_MODIFY) {
+                    //
+                }
+                else if (kind == ENTRY_CREATE) {
+//                    logger.debug("delay begin");
+//                    Thread.sleep(delay);
+//                    logger.debug("delay end");
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
-                        String adress = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
+                        String filePath = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
 
-                        if(directoryName == null){
+                        if (directoryName == null) {
                             System.out.println("Please create a folder first and only then add files to it!");
-                        }else{
-                            chechFileLength(adress);
-                            convertToSimpleEvent(adress);
                         }
-
-                    }else if(Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)){
+                        else {
+                            checkFileLength(filePath, fileDelay);
+                            convertToSimpleEvent(filePath);
+                        }
+                    }
+                    else if (Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)) {
                         directoryName = filename;
-                        logger.debug("Made a file.");
+                        Thread.sleep(directoryDelay);
+                        logger.debug("Directory " + directoryName + " created.");
                         registerAll(directory);
-
-                        Thread.sleep(delay);
-                    }else{
+                    }
+                    else {
                         System.out.println("File not recognized, suffix should be .evt or .xlsx.");
                     }
-
-                }else if (kind == ENTRY_DELETE){
-
+                }
+                else if (kind == ENTRY_DELETE) {
                     logger.debug(kind.name() + " " + directory);
-
                 }
             }
 
@@ -138,30 +169,34 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         }
     }
 
+
     public void warningMessage(String path){
-        System.out.println("File in path:");
+        System.out.println("File in path: ");
         System.out.println(path);
-        System.out.println("is corrupt, please check format of this file");
+        System.out.println(" is corrupt, please check format of this file.");
     }
-    int n = 0;
-    public void chechFileLength(String filePath){
-        n++;
-            File file = new File(filePath);
-            long prevFileSize = 0;
-            long currentFileSize = 1;
 
-        System.out.println("er i checkLength metoden, antall events er "+n+" currfileSize er "+currentFileSize);
 
-        while(prevFileSize != currentFileSize){
+    public void checkFileLength(String filePath, int fileDelay){
+        eventsProcessed++;
+        File file = new File(filePath);
+
+        long prevFileSize = 0;
+        long currentFileSize = 1;
+        while (prevFileSize != currentFileSize) {
             prevFileSize = currentFileSize;
             try {
-                Thread.sleep(200);
+                Thread.sleep(fileDelay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             currentFileSize = file.length();
+            logger.debug("prevFileSize = " + prevFileSize);
+            logger.debug("currentFileSize = " + currentFileSize);
         }
+        logger.debug("checkFileLength(): # events = " + eventsProcessed);
     }
+
 
     public abstract void convertToSimpleEvent(String filePath) throws IOException, ParseException;
 }

@@ -22,6 +22,7 @@ import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
 import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,13 +36,10 @@ import java.util.Scanner;
 
 
 public class MontracFileAdapter extends AbstractFileAdapter {
+    public final static Logger logger = Logger.getLogger(MontracFileAdapter.class);
 
-    public MontracFileAdapter() throws IOException, InterruptedException {
-        try {
-            scanDirectory(rootDirectoryPath, delayValue);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+    public MontracFileAdapter() {
     }
 
 

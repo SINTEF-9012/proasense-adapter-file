@@ -40,22 +40,7 @@ import java.util.Iterator;
 public class MaterialMovementFileAdapter extends AbstractFileAdapter {
 
 
-    public static void main(String[] args) {
-        try {
-            new MaterialMovementFileAdapter();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public MaterialMovementFileAdapter() throws IOException, InterruptedException {
-        try {
-            scanDirectory(rootDirectoryPath, delayValue);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public MaterialMovementFileAdapter() {
     }
 
 
@@ -102,9 +87,9 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         inputStream.close();
     }
 
+
     int cnt = 0;
     void splitAndPublichEvents(String rows) throws ParseException {
-
         if(cnt == 0){
             cnt++;
             return;
@@ -162,6 +147,7 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
         logger.debug(simpleEvent.toString());
     }
 
+
     String convertDate(String date){
         if(date.equals("0.0"))return "0";
         String[] dateSplit = date.split("\\.");
@@ -172,4 +158,10 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
 
         return finalDate;
     }
+
+
+    public static void main(String[] args) {
+        new MaterialMovementFileAdapter();
     }
+
+}
