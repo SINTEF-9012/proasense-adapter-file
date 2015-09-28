@@ -46,6 +46,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     private final Map<WatchKey,Path> keys;
     private boolean trace = false;
     public String sensorId;
+    protected Boolean isWindowsFileSystem;
     protected String rootDirectoryPath;
     protected int directoryDelayValue;
     protected int fileDelayValue;
@@ -55,6 +56,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected AbstractFileAdapter() {
         // Adapter properties
         sensorId = adapterProperties.getProperty("proasense.adapter.base.sensorid");
+        isWindowsFileSystem = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.system.windows"));
         rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.root.directory");
         directoryDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.directory"));
         fileDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.file"));
@@ -184,9 +186,16 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         eventsProcessed++;
 
         try {
-            File file = new File(filePath);
-            while (!checkFileExists(file)) {
+            if (!isWindowsFileSystem) {
                 Thread.sleep(fileDelay);
+            }
+
+            File file = new File(filePath);
+
+            if (isWindowsFileSystem) {
+                while (!checkFileExists(file)) {
+                    Thread.sleep(fileDelay);
+                }
             }
 
             long prevFileSize = -1;
