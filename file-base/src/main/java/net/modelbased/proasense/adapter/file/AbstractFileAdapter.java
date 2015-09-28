@@ -190,8 +190,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
             }
 
             long prevFileSize = 0;
-            long currentFileSize = 1;
-            while (prevFileSize != currentFileSize) {
+            long currentFileSize = 0;
+            while ((currentFileSize != 0) && (prevFileSize != currentFileSize)) {
                 prevFileSize = currentFileSize;
                 Thread.sleep(fileDelay);
                 currentFileSize = file.length();
