@@ -177,9 +177,13 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     }
 
 
-    public void checkFileLength(String filePath, int fileDelay){
+    public void checkFileLength(String filePath, int fileDelay) {
         eventsProcessed++;
+
         File file = new File(filePath);
+        while (!file.exists()) {
+            file = new File(filePath);
+        }
 
         long prevFileSize = 0;
         long currentFileSize = 1;
