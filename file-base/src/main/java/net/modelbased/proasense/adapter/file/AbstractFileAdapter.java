@@ -183,11 +183,12 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         eventsProcessed++;
 
         try {
+            Thread.sleep(fileDelay);
             File file = new File(filePath);
-            while (!checkFileExists(file)) {
-                Thread.sleep(fileDelay);
-                file = new File(filePath);
-            }
+//            while (!checkFileExists(file)) {
+//                Thread.sleep(fileDelay);
+//                file = new File(filePath);
+//            }
 
             long prevFileSize = 0;
             long currentFileSize = 1;
