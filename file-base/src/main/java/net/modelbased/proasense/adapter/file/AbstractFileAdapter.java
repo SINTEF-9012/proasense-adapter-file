@@ -136,7 +136,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 //                    logger.debug("delay end");
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
-                        String filePath = (directory.getParent().toAbsolutePath()+"\\"+directoryName+"\\"+filename);
+                        String filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
 
                         if (directoryName == null) {
                             System.out.println("Please create a folder first and only then add files to it!");
@@ -183,12 +183,11 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         eventsProcessed++;
 
         try {
-            Thread.sleep(fileDelay);
             File file = new File(filePath);
-//            while (!checkFileExists(file)) {
-//                Thread.sleep(fileDelay);
-//                file = new File(filePath);
-//            }
+            while (!file.exists()) {
+                Thread.sleep(fileDelay);
+                file = new File(filePath);
+            }
 
             long prevFileSize = 0;
             long currentFileSize = 1;
