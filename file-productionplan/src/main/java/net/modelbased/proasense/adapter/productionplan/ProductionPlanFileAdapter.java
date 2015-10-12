@@ -28,10 +28,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
@@ -39,11 +36,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     public ProductionPlanFileAdapter() {
+        super();
     }
 
 
@@ -51,6 +50,36 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         checkExcelRows(filePath);
     }
 
+    public void splitToCSV(String path) throws FileNotFoundException, ParseException {
+
+        FileReader file = new FileReader(path);
+        Scanner sc = new Scanner(file);
+
+        while(sc.hasNext()){
+            String firstElement = splitLine(sc.next());
+            String receipt = sc.next();
+            String quantety = sc.next();
+            String companyCode = sc.next();
+           // String scheduledFinish = sc.next();
+
+            String csvString = firstElement+","+receipt+","+quantety+","+companyCode;
+            splitAndPublishEvents(csvString);
+        }
+    }
+
+    String splitLine(String line){
+        char[] lineToArray = line.toCharArray();
+        String MRPElement = lineToArray[0]+""+lineToArray[1];
+        String plant = lineToArray[2]+""+lineToArray[3]+""+lineToArray[4]+""+lineToArray[5];
+        String materials = "";
+
+        for(int i = 6; i < lineToArray.length; i++){
+            materials += lineToArray[i];
+        }
+
+        String doneString = MRPElement+","+plant+","+materials;
+        return doneString;
+    }
 
     public void checkExcelRows(String filePath) throws IOException, ParseException {
         FileInputStream inputStream = new FileInputStream(new File(filePath));
@@ -86,7 +115,11 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
             if (row.startsWith("MRP element")) {
                 continue;
             } else {
-                splitAndPublichEvents(row);
+                if (cnt == 0) {
+                    cnt++;
+                    return;
+                }
+                splitAndPublishEvents(row);
             }
         }
         workbook.close();
@@ -95,11 +128,8 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     int cnt = 0;
-    void splitAndPublichEvents(String rows) throws ParseException {
-        if (cnt == 0) {
-            cnt++;
-            return;
-        }
+    void splitAndPublishEvents(String rows) throws ParseException {
+
         String[] rowValue = rows.split(",");
         String MRAP_Element = rowValue[0];
         String plant = rowValue[1];
@@ -121,7 +151,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
         String quantity = rowValue[4];
         String company_code = rowValue[5];
-        String Scheduled_finish = rowValue[6];
+//        String Scheduled_finish = rowValue[6];
 
 
         SimpleEvent simpleEvent = new SimpleEvent();
@@ -155,14 +185,22 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     String convertDate(String date) {
-        if (date.equals("0.0")) return "0";
         String[] dateSplit = date.split("\\.");
-        String newFormat = dateSplit[0] + "" + dateSplit[1].substring(0, 7);
-        char[] modifyDate = newFormat.toCharArray();
-        String finalDate = modifyDate[0] + "" + modifyDate[1] + "" + modifyDate[2] + "" + modifyDate[3] + "/" + modifyDate[4] + "" + modifyDate[5] + ""
-                + "/" + modifyDate[6] + "" + modifyDate[7];
 
-        return finalDate;
+        if (date.equals("0.0") || date.equals("00000000")){
+            return "0";
+        }else if(dateSplit.length == 1) {
+            String changeDateFormat = date.substring(0,4)+"/"+date.substring(4,6)+"/"+date.substring(6,8);
+            logger.debug("formatted date is "+changeDateFormat);
+            return changeDateFormat;
+        }else{
+            String newFormat = dateSplit[0] + "" + dateSplit[1].substring(0, 7);
+            char[] modifyDate = newFormat.toCharArray();
+            String finalDate = modifyDate[0] + "" + modifyDate[1] + "" + modifyDate[2] + "" + modifyDate[3] + "/" + modifyDate[4] + "" + modifyDate[5] + ""
+                    + "/" + modifyDate[6] + "" + modifyDate[7];
+
+            return finalDate;
+        }
     }
 
 

@@ -30,6 +30,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,6 +42,11 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
 
 
     public MaterialMovementFileAdapter() {
+    }
+
+    @Override
+    public void splitToCSV(String path) throws FileNotFoundException {
+
     }
 
 

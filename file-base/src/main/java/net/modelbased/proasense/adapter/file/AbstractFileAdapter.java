@@ -134,17 +134,17 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     //
                 }
                 else if (kind == ENTRY_CREATE) {
-//                    logger.debug("delay begin");
-//                    Thread.sleep(delay);
-//                    logger.debug("delay end");
+
                     String suffix[] = (directory.toString()).split("\\.");
-                    if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")))){
+                    if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")) || (suffix[1].endsWith("txt")))){
                         String filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
 
                         if (directoryName == null) {
                             System.out.println("Please create a folder first and only then add files to it!");
-                        }
-                        else {
+
+                        } else if(suffix[1].endsWith("txt")){
+                                splitToCSV(filePath);
+                        }else{
                             checkFileLength(filePath, fileDelay);
                             convertToSimpleEvent(filePath);
                         }
@@ -156,7 +156,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         registerAll(directory);
                     }
                     else {
-                        System.out.println("File not recognized, suffix should be .evt or .xlsx.");
+                        System.out.println("File not recognized, suffix should be .evt , .xlsx or .txt.");
                     }
                 }
                 else if (kind == ENTRY_DELETE) {
@@ -239,6 +239,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         return false;
     }
 
+    abstract public void splitToCSV(String path) throws FileNotFoundException, ParseException;
 
     public abstract void convertToSimpleEvent(String filePath) throws IOException, ParseException;
 }
