@@ -21,6 +21,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:032d97c688c718ed2ba52c7006a61a30f9031f8f" level="project" />
     <orderEntry type="module" module-name="file-base" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />

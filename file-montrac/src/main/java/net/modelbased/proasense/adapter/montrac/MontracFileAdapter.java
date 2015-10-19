@@ -42,6 +42,11 @@ public class MontracFileAdapter extends AbstractFileAdapter {
     public MontracFileAdapter() {
     }
 
+    @Override
+    public void splitToCSV(String path) throws FileNotFoundException, ParseException {
+
+    }
+
 
     public void convertToSimpleEvent(String filePath) throws FileNotFoundException {
         logger.debug("Processing file = " + filePath);
