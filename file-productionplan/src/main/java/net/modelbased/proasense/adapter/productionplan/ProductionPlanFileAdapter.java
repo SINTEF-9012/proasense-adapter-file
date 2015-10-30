@@ -180,7 +180,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         simpleEvent.putToEventProperties("quantity", complexValue);
 
         outputPort.publishSimpleEvent(simpleEvent);
-        logger.debug(simpleEvent.toString());
+        logger.debug("SimpleEvent = " + simpleEvent.toString());
     }
 
 

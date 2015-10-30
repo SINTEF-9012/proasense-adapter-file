@@ -27,7 +27,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <!-- Allows the adapter to be run via 'mvn compile exec:java' -->
             <plugin>
@@ -38,6 +37,26 @@
                     <mainClass>net.modelbased.proasense.adapter.productionplan.ProductionPlanFileAdapter</mainClass>
                     <includePluginDependencies>false</includePluginDependencies>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>net.modelbased.proasense.adapter.productionplan.ProductionPlanFileAdapter</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

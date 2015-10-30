@@ -142,9 +142,10 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         if (directoryName == null) {
                             System.out.println("Please create a folder first and only then add files to it!");
 
-                        } else if(suffix[1].endsWith("txt")){
-                                splitToCSV(filePath);
-                        }else{
+                        } else if(suffix[1].endsWith("txt")) {
+                            checkFileLength(filePath, fileDelay);
+                            splitToCSV(filePath);
+                        } else {
                             checkFileLength(filePath, fileDelay);
                             convertToSimpleEvent(filePath);
                         }
