@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.github.SINTEF-9012</groupId>
             <artifactId>proasense-adapter-base</artifactId>
-            <version>e45bb6c346c87eeebe51944197521131e810c6f1</version>
+            <version>26aaa2afcf981daa9463514ab2081bfe4f6e6db4</version>
         </dependency>
         <dependency>
             <groupId>eu.proasense.internal</groupId>
@@ -76,10 +76,6 @@
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.2.2</version>
             <exclusions>
-                <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
-                    <artifactId>zookeeper</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>log4j</groupId>
                     <artifactId>log4j</artifactId>

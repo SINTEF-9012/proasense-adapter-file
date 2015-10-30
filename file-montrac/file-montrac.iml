@@ -21,12 +21,8 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:e45bb6c346c87eeebe51944197521131e810c6f1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:0.8.2.2" level="project" />
-    <orderEntry type="library" name="Maven: org.xerial.snappy:snappy-java:1.1.1.7" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.kafka:kafka_2.10:0.8.2.2" level="project" />
     <orderEntry type="module" module-name="file-base" />
-    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:e45bb6c346c87eeebe51944197521131e810c6f1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:26aaa2afcf981daa9463514ab2081bfe4f6e6db4" level="project" />
     <orderEntry type="library" name="Maven: eu.proasense.internal:thrift-messages:0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
@@ -43,6 +39,9 @@
     <orderEntry type="library" name="Maven: org.apache.kafka:kafka_2.10:0.8.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.yammer.metrics:metrics-core:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.10.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.6" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty:3.7.0.Final" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jopt-simple:jopt-simple:3.2" level="project" />
     <orderEntry type="library" name="Maven: com.101tec:zkclient:0.3" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.1" level="project" />
