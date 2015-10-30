@@ -51,6 +51,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected int directoryDelayValue;
     protected int fileDelayValue;
     private int eventsProcessed = 0;
+    private boolean traverseSubs = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.traverse.subdirectories"));
 
 
     protected AbstractFileAdapter() {
@@ -137,11 +138,16 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")) || (suffix[1].endsWith("txt")))){
-                        String filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
+                        String filePath = "";
 
-                        if (directoryName == null) {
+                        if(traverseSubs){
+                            filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
+                        }else{
+                            filePath = directory.getParent()+"/"+filename;
+                        }
+
+                        if (directoryName == null && traverseSubs) {
                             System.out.println("Please create a folder first and only then add files to it!");
-
                         } else if(suffix[1].endsWith("txt")) {
                             checkFileLength(filePath, fileDelay);
                             splitToCSV(filePath);
