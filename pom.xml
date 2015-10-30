@@ -18,6 +18,11 @@
 
     <repositories>
         <repository>
+            <id>maven-central</id>
+            <name>Maven central repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
             <id>archiva.public</id>
             <name>Nissatech Public Repository</name>
             <url>http://maven.nissatech.com/repository/public/</url>
