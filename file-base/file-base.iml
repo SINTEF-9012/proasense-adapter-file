@@ -191,6 +191,10 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:26aaa2afcf981daa9463514ab2081bfe4f6e6db4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.6" level="project" />
+    <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty:3.7.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:26aaa2afcf981daa9463514ab2081bfe4f6e6db4" level="project" />
     <orderEntry type="library" name="Maven: eu.proasense.internal:thrift-messages:0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
