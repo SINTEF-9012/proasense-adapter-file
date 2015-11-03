@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.github.SINTEF-9012</groupId>
             <artifactId>proasense-adapter-base</artifactId>
-            <version>3317de2103439257514f232c7eb80d32a6a5712d</version>
+            <version>deb40c5f434235827d69fb48806acacee613bfc9</version>
         </dependency>
         <dependency>
             <groupId>eu.proasense.internal</groupId>

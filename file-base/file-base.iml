@@ -190,7 +190,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:3317de2103439257514f232c7eb80d32a6a5712d" level="project" />
+    <orderEntry type="library" name="Maven: com.github.SINTEF-9012:proasense-adapter-base:deb40c5f434235827d69fb48806acacee613bfc9" level="project" />
     <orderEntry type="library" name="Maven: eu.proasense.internal:thrift-messages:0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />

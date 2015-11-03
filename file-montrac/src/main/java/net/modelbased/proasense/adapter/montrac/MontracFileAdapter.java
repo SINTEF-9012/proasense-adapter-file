@@ -18,10 +18,12 @@
  */
 package net.modelbased.proasense.adapter.montrac;
 
+import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
-import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
