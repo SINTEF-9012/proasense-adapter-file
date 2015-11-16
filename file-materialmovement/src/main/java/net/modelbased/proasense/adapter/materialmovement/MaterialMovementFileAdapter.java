@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-2015 SINTEF
  *
- *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Brian ElvesÃ¦ter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,156 +18,125 @@
  */
 package net.modelbased.proasense.adapter.materialmovement;
 
+import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
-import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
 
 public class MaterialMovementFileAdapter extends AbstractFileAdapter {
+    public final static Logger logger = Logger.getLogger(MaterialMovementFileAdapter.class);
 
 
     public MaterialMovementFileAdapter() {
+        super();
     }
 
-    @Override
-    public void splitToCSV(String path) throws FileNotFoundException {
 
+    public void splitToCSV(String path) throws FileNotFoundException {
+        try {
+            convertToSimpleEvent(path);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void convertToSimpleEvent(String filePath) throws IOException, ParseException {
-        checkExcelRows(filePath);
-    }
+        logger.debug("Processing file = " + filePath);
 
+        File file = new File(filePath);
+        Scanner scanner = new Scanner(file);
 
-    public void checkExcelRows(String filePath) throws IOException, ParseException {
+        while (scanner.hasNextLine()) {
+            String removeWhitespace = scanner.nextLine().replace(" ", "");
+            String values[] = removeWhitespace.split(",");
 
-        FileInputStream inputStream = new FileInputStream(new File(filePath));
-
-        Workbook workbook = new XSSFWorkbook(inputStream);
-        Sheet firstSheet = workbook.getSheetAt(0);
-        Iterator<Row> iterator = firstSheet.iterator();
-        int i = 1;
-        while (iterator.hasNext()) {
-            Row nextRow = iterator.next();
-            Iterator<Cell> cellIterator = nextRow.cellIterator();
-            // String row = ""+i+",";
-            String row = "";
-            while (cellIterator.hasNext()) {
-                Cell cell = cellIterator.next();
-
-                switch (cell.getCellType()) {
-                    case Cell.CELL_TYPE_STRING:
-                        row += cell.getStringCellValue();
-                        break;
-                    case Cell.CELL_TYPE_NUMERIC:
-                        row += String.valueOf(cell.getNumericCellValue());
-                        //String x = cell.getStringCellValue();
-                        break;
-                }
-
-                if(cellIterator.hasNext()){
-                    row+= ",";
-                }
-
+            if (values.length != 8) {
+                warningMessage(filePath);
+                return;
             }
-            i++;
-            splitAndPublichEvents(row);
+
+            Map<String, ComplexValue> properties = new HashMap<String, ComplexValue>();
+
+            ComplexValue complexValue = new ComplexValue();
+            complexValue.setValue(values[0]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("materialId", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[1]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("sourceType", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[2]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("sourceBin", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[3]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("destinationType", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[4]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("destinationBin", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[5]);
+            complexValue.setType(VariableType.LONG);
+            properties.put("destinationQuantity", complexValue);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(convertToTimeMillis(values[6], values[7]));
+            complexValue.setType(VariableType.LONG);
+            properties.put("creationDate", complexValue);
+
+            SimpleEvent event = this.outputPort.createSimpleEvent(this.sensorId, System.currentTimeMillis(), properties);
+            this.outputPort.publishSimpleEvent(event);
+            logger.debug("SimpleEvent = " + event);
         }
-        workbook.close();
-        inputStream.close();
     }
 
 
-    int cnt = 0;
-    void splitAndPublichEvents(String rows) throws ParseException {
-        if(cnt == 0){
-            cnt++;
-            return;
+    private String convertToTimeMillis(String time, String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+        String dateString = date + " " + time;
+        logger.debug("convertToTimeMillis().dateString = " + dateString);
+
+        long timestamp = 0;
+        try {
+            timestamp = dateFormat.parse(dateString).getTime();
         }
-        String[] rowValue = rows.split(",");
-        String MRAP_Element = rowValue[0];
-        String plant = rowValue[1];
-        String materials = rowValue[2];
-
-        Date date = new Date();
-        String receipt_requirement_date = rowValue[3];
-        String modifiedDate = convertDate(receipt_requirement_date);
-
-        String longDate = "";
-
-        if(modifiedDate.equals("0")){
-            longDate = modifiedDate;
-        }else{
-            DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-            Date date1 = format.parse(modifiedDate);
-            longDate = String.valueOf(date1.getTime());
+        catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        String quantity = rowValue[4];
-        String company_code = rowValue[5];
-        String Scheduled_finish = rowValue[6];
-
-
-        SimpleEvent simpleEvent = new SimpleEvent();
-
-        simpleEvent.setSensorId(sensorId);
-        simpleEvent.setTimestamp(date.getTime());
-
-        ComplexValue complexValue = new ComplexValue();
-        complexValue.setValue(MRAP_Element);
-        complexValue.setType(VariableType.STRING);
-        simpleEvent.putToEventProperties("mrpElement", complexValue);
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(materials);
-        complexValue.setType(VariableType.STRING);
-        simpleEvent.putToEventProperties("materials", complexValue);
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(longDate);
-        complexValue.setType(VariableType.LONG);
-        simpleEvent.putToEventProperties("plannedDate", complexValue);
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(quantity);
-        complexValue.setType(VariableType.LONG);
-        simpleEvent.putToEventProperties("quantity", complexValue);
-
-        outputPort.publishSimpleEvent(simpleEvent);
-        logger.debug(simpleEvent.toString());
-    }
-
-
-    String convertDate(String date){
-        if(date.equals("0.0"))return "0";
-        String[] dateSplit = date.split("\\.");
-        String newFormat = dateSplit[0]+""+dateSplit[1].substring(0,7);
-        char[] modifyDate = newFormat.toCharArray();
-        String finalDate = modifyDate[0]+""+modifyDate[1]+""+modifyDate[2]+""+modifyDate[3]+"/"+modifyDate[4]+""+modifyDate[5]+""
-                +"/"+modifyDate[6]+""+modifyDate[7];
-
-        return finalDate;
+        return new Long(timestamp).toString();
     }
 
 
     public static void main(String[] args) {
         new MaterialMovementFileAdapter();
     }
-
 }

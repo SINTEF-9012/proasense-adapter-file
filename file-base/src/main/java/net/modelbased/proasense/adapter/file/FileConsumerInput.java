@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-2015 SINTEF
  *
- *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Brian ElvesÃ¦ter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

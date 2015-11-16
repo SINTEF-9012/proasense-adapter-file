@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-2015 SINTEF
  *
- *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Brian Elvesï¿½ter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,27 +18,37 @@
  */
 package net.modelbased.proasense.adapter.productionplan;
 
+import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
-import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
+
+import org.apache.log4j.Logger;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 
+
 public class ProductionPlanFileAdapter extends AbstractFileAdapter {
+    public final static Logger logger = Logger.getLogger(ProductionPlanFileAdapter.class);
 
 
     public ProductionPlanFileAdapter() {
@@ -50,24 +60,25 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         checkExcelRows(filePath);
     }
 
-    public void splitToCSV(String path) throws FileNotFoundException, ParseException {
 
+    public void splitToCSV(String path) throws FileNotFoundException, ParseException {
         FileReader file = new FileReader(path);
         Scanner sc = new Scanner(file);
 
         while(sc.hasNext()){
             String firstElement = splitLine(sc.next());
             String receipt = sc.next();
-            String quantety = sc.next();
+            String quantity = sc.next();
             String companyCode = sc.next();
            // String scheduledFinish = sc.next();
 
-            String csvString = firstElement+","+receipt+","+quantety+","+companyCode;
+            String csvString = firstElement+","+receipt+","+quantity+","+companyCode;
             splitAndPublishEvents(csvString);
         }
     }
 
-    String splitLine(String line){
+
+    private String splitLine(String line){
         char[] lineToArray = line.toCharArray();
         String MRPElement = lineToArray[0]+""+lineToArray[1];
         String plant = lineToArray[2]+""+lineToArray[3]+""+lineToArray[4]+""+lineToArray[5];
@@ -81,7 +92,8 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         return doneString;
     }
 
-    public void checkExcelRows(String filePath) throws IOException, ParseException {
+
+    private void checkExcelRows(String filePath) throws IOException, ParseException {
         FileInputStream inputStream = new FileInputStream(new File(filePath));
 
         Workbook workbook = new XSSFWorkbook(inputStream);
@@ -128,8 +140,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
 
     int cnt = 0;
-    void splitAndPublishEvents(String rows) throws ParseException {
-
+    private void splitAndPublishEvents(String rows) throws ParseException {
         String[] rowValue = rows.split(",");
         String MRAP_Element = rowValue[0];
         String plant = rowValue[1];
@@ -152,7 +163,6 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         String quantity = rowValue[4];
         String company_code = rowValue[5];
 //        String Scheduled_finish = rowValue[6];
-
 
         SimpleEvent simpleEvent = new SimpleEvent();
 
@@ -184,16 +194,18 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     }
 
 
-    String convertDate(String date) {
+    private String convertDate(String date) {
         String[] dateSplit = date.split("\\.");
 
         if (date.equals("0.0") || date.equals("00000000")){
             return "0";
-        }else if(dateSplit.length == 1) {
+        }
+        else if(dateSplit.length == 1) {
             String changeDateFormat = date.substring(0,4)+"/"+date.substring(4,6)+"/"+date.substring(6,8);
             logger.debug("formatted date is "+changeDateFormat);
             return changeDateFormat;
-        }else{
+        }
+        else {
             String newFormat = dateSplit[0] + "" + dateSplit[1].substring(0, 7);
             char[] modifyDate = newFormat.toCharArray();
             String finalDate = modifyDate[0] + "" + modifyDate[1] + "" + modifyDate[2] + "" + modifyDate[3] + "/" + modifyDate[4] + "" + modifyDate[5] + ""
@@ -207,5 +219,4 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     public static void main(String[] args) {
         new ProductionPlanFileAdapter();
     }
-
 }

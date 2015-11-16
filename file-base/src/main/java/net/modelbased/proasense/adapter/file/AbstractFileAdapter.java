@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2014-2015 SINTEF
  *
- *     Brian Elvesæter <brian.elvesater@sintef.no>
+ *     Brian ElvesÃ¦ter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -109,22 +109,22 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
             WatchKey key;
             try {
                 key = watcher.take();
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 e.printStackTrace();
                 return;
             }
 
-
             for (WatchEvent<?> event : key.pollEvents()) {
                 WatchEvent.Kind kind = event.kind();
-
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path filename = ev.context();
                 Path directory;
 
                 if(filename != null) {
                     directory = dir.resolve(filename);
-                }else{
+                }
+                else {
                     continue;
                 }
 
@@ -135,14 +135,14 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     //
                 }
                 else if (kind == ENTRY_CREATE) {
-
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")) || (suffix[1].endsWith("txt")))){
                         String filePath = "";
 
-                        if(traverseSubs){
+                        if (traverseSubs) {
                             filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
-                        }else{
+                        }
+                        else {
                             filePath = directory.getParent()+"/"+filename;
                         }
 
@@ -163,7 +163,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         registerAll(directory);
                     }
                     else {
-                        System.out.println("File not recognized, suffix should be .evt , .xlsx or .txt.");
+                        System.out.println("File not recognized, suffix should be .evt, .xlsx or .txt.");
                     }
                 }
                 else if (kind == ENTRY_DELETE) {
@@ -246,7 +246,9 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         return false;
     }
 
-    abstract public void splitToCSV(String path) throws FileNotFoundException, ParseException;
+
+    public abstract void splitToCSV(String path) throws FileNotFoundException, ParseException;
+
 
     public abstract void convertToSimpleEvent(String filePath) throws IOException, ParseException;
 }

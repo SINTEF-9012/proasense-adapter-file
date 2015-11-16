@@ -44,9 +44,9 @@ public class MontracFileAdapter extends AbstractFileAdapter {
     public MontracFileAdapter() {
     }
 
+
     @Override
     public void splitToCSV(String path) throws FileNotFoundException, ParseException {
-
     }
 
 
@@ -56,13 +56,13 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         Scanner scanner = new Scanner(file);
         Map<String, ComplexValue> properties = new HashMap<String, ComplexValue>();
 
-        String date = scanner.next() + " " +scanner.next();
+        String date = scanner.next() + " " + scanner.next();
         String removeWhitespace = scanner.nextLine().replace(" ", "");
 
         String values[] = removeWhitespace.split(",");
 
-        if(values.length != 5){
-        warningMessage(filePath);
+        if (values.length != 5) {
+            warningMessage(filePath);
             return;
         }
 
@@ -71,9 +71,10 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
         try {
             parsedDate = dateFormat.parse(date);
-        } catch (ParseException e) {
+        }
+        catch (ParseException e) {
             e.printStackTrace();
-            System.out.println("Please check the dateformat for the file below "+e);
+            System.out.println("Please check the dateformat for the file below " + e);
             warningMessage(filePath);
         }
 
