@@ -216,7 +216,14 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     }
 
 
+    // Start method
     public static void main(String[] args) {
         new ProductionPlanFileAdapter();
+    }
+
+
+    // Stop method
+    public static void stop(String[] args) {
+        System.exit(0);
     }
 }

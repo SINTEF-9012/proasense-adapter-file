@@ -136,7 +136,14 @@ public class MaterialMovementFileAdapter extends AbstractFileAdapter {
     }
 
 
+    // Start method
     public static void main(String[] args) {
         new MaterialMovementFileAdapter();
+    }
+
+
+    // Stop method
+    public static void stop(String[] args) {
+        System.exit(0);
     }
 }

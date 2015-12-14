@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,7 +106,7 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         complexValue.setValue(leftPiece[1]);
         complexValue.setType(VariableType.BOOLEAN);
         properties.put("leftPiece", complexValue);
-        logger.debug("leftpiece = " + leftPiece[1]);
+        logger.debug("leftPiece = " + leftPiece[1]);
 
         String rightPiece[] = values[4].split("=");
 
@@ -123,7 +122,14 @@ public class MontracFileAdapter extends AbstractFileAdapter {
     }
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    // Start method
+    public static void main(String[] args) {
         new MontracFileAdapter();
+    }
+
+
+    // Stop method
+    public static void stop(String[] args) {
+        System.exit(0);
     }
 }
