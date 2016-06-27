@@ -50,6 +50,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected String rootDirectoryPath;
     protected int directoryDelayValue;
     protected int fileDelayValue;
+    protected Boolean isDeleteFile;
     private int eventsProcessed = 0;
     private boolean traverseSubs = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.traverse.subdirectories"));
 
@@ -61,6 +62,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         rootDirectoryPath = adapterProperties.getProperty("proasense.adapter.file.root.directory");
         directoryDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.directory"));
         fileDelayValue = Integer.parseInt(adapterProperties.getProperty("proasense.adapter.file.delay.file"));
+        isDeleteFile = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.delete.file"));
 
         keys = new HashMap<WatchKey,Path>();
         this.inputPort = new FileConsumerInput();
@@ -154,6 +156,10 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         } else {
                             checkFileLength(filePath, fileDelay);
                             convertToSimpleEvent(filePath);
+
+                            if (isDeleteFile) {
+                                boolean fileDeleted = new File(filePath).delete();
+                            }
                         }
                     }
                     else if (Files.isDirectory(directory, LinkOption.NOFOLLOW_LINKS)) {
