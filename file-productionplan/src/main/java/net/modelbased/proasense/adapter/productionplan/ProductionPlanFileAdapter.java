@@ -142,7 +142,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
     int cnt = 0;
     private void splitAndPublishEvents(String rows) throws ParseException {
         String[] rowValue = rows.split(",");
-        String MRAP_Element = rowValue[0];
+        String MRP_Element = rowValue[0];
         String plant = rowValue[1];
         String materials = rowValue[2];
 
@@ -170,7 +170,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
         simpleEvent.setTimestamp(date.getTime());
 
         ComplexValue complexValue = new ComplexValue();
-        complexValue.setValue(MRAP_Element);
+        complexValue.setValue(MRP_Element);
         complexValue.setType(VariableType.STRING);
         simpleEvent.putToEventProperties("mrpElement", complexValue);
 
@@ -186,7 +186,7 @@ public class ProductionPlanFileAdapter extends AbstractFileAdapter {
 
         complexValue = new ComplexValue();
         complexValue.setValue(quantity);
-        complexValue.setType(VariableType.LONG);
+        complexValue.setType(VariableType.DOUBLE);
         simpleEvent.putToEventProperties("quantity", complexValue);
 
         outputPort.publishSimpleEvent(simpleEvent);
