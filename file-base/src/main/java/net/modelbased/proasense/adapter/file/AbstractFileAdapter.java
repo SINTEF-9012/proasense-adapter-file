@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014-2015 SINTEF
+ * Copyright (C) 2014-2016 SINTEF
  *
  *     Brian Elvesæter <brian.elvesater@sintef.no>
  *     Shahzad Karamat <shazad.karamat@gmail.com>
@@ -51,6 +51,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected int directoryDelayValue;
     protected int fileDelayValue;
     protected Boolean isDeleteFile;
+    protected Boolean isArchiveFile;
+    protected String archiveDirectoryPath;
     private int eventsProcessed = 0;
     private boolean traverseSubs = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.traverse.subdirectories"));
 
@@ -142,10 +144,12 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         String filePath = "";
 
                         if (traverseSubs) {
-                            filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
+                            //filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
+                            filePath = (directory.getParent().toAbsolutePath() + File.separator + directoryName + File.separator + filename);
                         }
                         else {
-                            filePath = directory.getParent()+"/"+filename;
+                            //filePath = directory.getParent()+"/"+filename;
+                            filePath = directory.getParent() + File.separator + filename;
                         }
 
                         if (directoryName == null && traverseSubs) {

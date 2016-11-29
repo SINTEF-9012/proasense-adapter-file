@@ -18,12 +18,10 @@
  */
 package net.modelbased.proasense.adapter.montrac;
 
-import net.modelbased.proasense.adapter.file.AbstractFileAdapter;
-
 import eu.proasense.internal.ComplexValue;
 import eu.proasense.internal.SimpleEvent;
 import eu.proasense.internal.VariableType;
-
+import net.modelbased.proasense.adapter.file.AbstractFileSimulator;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -36,16 +34,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 
-public class MontracFileAdapter extends AbstractFileAdapter {
-    public final static Logger logger = Logger.getLogger(MontracFileAdapter.class);
+public class MontracFileSimulator extends AbstractFileSimulator {
+    public final static Logger logger = Logger.getLogger(MontracFileSimulator.class);
 
 
-    public MontracFileAdapter() {
-    }
-
-
-    @Override
-    public void splitToCSV(String path) throws FileNotFoundException, ParseException {
+    public MontracFileSimulator(String folderPath) {
+        super(folderPath);
     }
 
 
@@ -126,7 +120,12 @@ public class MontracFileAdapter extends AbstractFileAdapter {
 
     // Start method
     public static void main(String[] args) {
-        new MontracFileAdapter();
+        if (args.length != 1){
+            System.out.println("Usage: MontracFileSimulator <Montrac data folder>");
+        }
+        else {
+            new MontracFileSimulator(args[0]);
+        }
     }
 
 
