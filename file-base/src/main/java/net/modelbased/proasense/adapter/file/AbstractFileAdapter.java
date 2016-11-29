@@ -18,9 +18,12 @@
  */
 package net.modelbased.proasense.adapter.file;
 
+import com.sun.nio.file.ExtendedWatchEventModifier;
 import net.modelbased.proasense.adapter.base.AbstractBaseAdapter;
 
 import org.apache.log4j.Logger;
+
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +36,7 @@ import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.sun.nio.file.ExtendedWatchEventModifier.*;
 import static java.nio.file.StandardWatchEventKinds.*;
 
 
@@ -51,8 +55,6 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
     protected int directoryDelayValue;
     protected int fileDelayValue;
     protected Boolean isDeleteFile;
-    protected Boolean isArchiveFile;
-    protected String archiveDirectoryPath;
     private int eventsProcessed = 0;
     private boolean traverseSubs = Boolean.parseBoolean(adapterProperties.getProperty("proasense.adapter.file.traverse.subdirectories"));
 
@@ -96,7 +98,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
 
 
     private void register(Path dir) throws IOException {
-        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+//        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+        WatchKey key = dir.register(watcher, new WatchEvent.Kind<?>[]{ ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY }, com.sun.nio.file.ExtendedWatchEventModifier.FILE_TREE);
         keys.put(key, dir);
     }
 
@@ -107,7 +110,8 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
         Path directoryName = null;
         Path dir = Paths.get(path);
 
-        registerAll(dir);
+//        registerAll(dir);
+        register(dir);
 
         for(;;) {
             WatchKey key;
@@ -139,22 +143,54 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     //
                 }
                 else if (kind == ENTRY_CREATE) {
+                    // Get filename
+//                    System.out.println("Filename = " + filename);
+
+                    String filepath = path + File.separator + filename;
+                    //String filepath = filename.toAbsolutePath().toString();
+                    //String filepath = ev.context().toRealPath().toString();
+//                    System.out.println("Filepath = " + filepath);
+                    File file = new File(filepath);
+
+                    if (file.isDirectory()) {
+                        Thread.sleep(directoryDelay);
+                        logger.debug("Directory " + file + " created.");
+                    }
+                    else if (file.isFile()) {
+                        String suffix = FilenameUtils.getExtension(filepath);
+                        if (suffix.equals("evt") || suffix.equals("xlsx") || suffix.equals("txt")) {
+                            if (suffix.equals("txt")) {
+                                checkFileLength(filepath, fileDelay);
+                                splitToCSV(filepath);
+                            } else {
+                                checkFileLength(filepath, fileDelay);
+                                convertToSimpleEvent(filepath);
+
+                                if (isDeleteFile) {
+                                    boolean fileDeleted = new File(filepath).delete();
+                                }
+                            }
+                        }
+                        else {
+                            System.out.println("File not recognized, suffix should be .evt, .xlsx or .txt.");
+                        }
+                    }
+/*
                     String suffix[] = (directory.toString()).split("\\.");
                     if((suffix.length > 1) && ((suffix[1].endsWith("evt")) || (suffix[1].endsWith("xlsx")) || (suffix[1].endsWith("txt")))){
                         String filePath = "";
 
                         if (traverseSubs) {
-                            //filePath = (directory.getParent().toAbsolutePath()+"/"+directoryName+"/"+filename);
                             filePath = (directory.getParent().toAbsolutePath() + File.separator + directoryName + File.separator + filename);
                         }
                         else {
-                            //filePath = directory.getParent()+"/"+filename;
                             filePath = directory.getParent() + File.separator + filename;
                         }
 
-                        if (directoryName == null && traverseSubs) {
+                      if (directoryName == null && traverseSubs) {
                             System.out.println("Please create a folder first and only then add files to it!");
                         } else if(suffix[1].endsWith("txt")) {
+//                        if(suffix[1].endsWith("txt")) {
                             checkFileLength(filePath, fileDelay);
                             splitToCSV(filePath);
                         } else {
@@ -175,6 +211,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                     else {
                         System.out.println("File not recognized, suffix should be .evt, .xlsx or .txt.");
                     }
+*/
                 }
                 else if (kind == ENTRY_DELETE) {
                     logger.debug(kind.name() + " " + directory);
