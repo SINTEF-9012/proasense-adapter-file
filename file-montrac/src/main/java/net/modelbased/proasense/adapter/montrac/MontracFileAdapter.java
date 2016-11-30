@@ -55,70 +55,74 @@ public class MontracFileAdapter extends AbstractFileAdapter {
         Scanner scanner = new Scanner(file);
         Map<String, ComplexValue> properties = new HashMap<String, ComplexValue>();
 
-        String date = scanner.next() + " " + scanner.next();
-        String removeWhitespace = scanner.nextLine().replace(" ", "");
-
-        String values[] = removeWhitespace.split(",");
-
-        if (values.length != 5) {
-            warningMessage(filePath);
-            return;
-        }
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Date parsedDate = null;
-
         try {
-            parsedDate = dateFormat.parse(date);
+            String date = scanner.next() + " " + scanner.next();
+            String removeWhitespace = scanner.nextLine().replace(" ", "");
+
+            String values[] = removeWhitespace.split(",");
+
+            if (values.length != 5) {
+                warningMessage(filePath);
+                return;
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date parsedDate = null;
+
+            try {
+                parsedDate = dateFormat.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                System.out.println("Please check the dateformat for the file below " + e);
+                warningMessage(filePath);
+            }
+
+            long timestamp = parsedDate.getTime();
+
+            logger.debug("timestamp = " + timestamp);
+            logger.debug("sensorId = " + sensorId);
+
+            ComplexValue complexValue = new ComplexValue();
+            complexValue.setValue(values[0]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("location", complexValue);
+            logger.debug("location = " + values[0]);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[1]);
+            complexValue.setType(VariableType.STRING);
+            properties.put("event", complexValue);
+            logger.debug("event = " + values[1]);
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(values[2]);
+            complexValue.setType(VariableType.LONG);
+            properties.put("shuttle", complexValue);
+            logger.debug("shuttle = " + values[2]);
+
+            String leftPiece[] = values[3].split("=");
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(leftPiece[1]);
+            complexValue.setType(VariableType.BOOLEAN);
+            properties.put("leftPiece", complexValue);
+            logger.debug("leftPiece = " + leftPiece[1]);
+
+            String rightPiece[] = values[4].split("=");
+
+            complexValue = new ComplexValue();
+            complexValue.setValue(rightPiece[1]);
+            complexValue.setType(VariableType.BOOLEAN);
+            properties.put("rightPiece", complexValue);
+            logger.debug("rightPiece = " + rightPiece[1]);
+
+            SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
+            this.outputPort.publishSimpleEvent(event);
+            logger.debug("SimpleEvent = " + event.toString());
         }
-        catch (ParseException e) {
-            e.printStackTrace();
-            System.out.println("Please check the dateformat for the file below " + e);
-            warningMessage(filePath);
+        catch (Exception e) {
+            logger.debug("Parsing error in conversion to simple events. Skipping file: " + filePath);
         }
-
-        long timestamp = parsedDate.getTime();
-
-        logger.debug("timestamp = " + timestamp);
-        logger.debug("sensorId = " + sensorId);
-
-        ComplexValue complexValue = new ComplexValue();
-        complexValue.setValue(values[0]);
-        complexValue.setType(VariableType.STRING);
-        properties.put("location", complexValue);
-        logger.debug("location = " + values[0]);
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(values[1]);
-        complexValue.setType(VariableType.STRING);
-        properties.put("event", complexValue);
-        logger.debug("event = " + values[1]);
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(values[2]);
-        complexValue.setType(VariableType.LONG);
-        properties.put("shuttle", complexValue);
-        logger.debug("shuttle = " + values[2]);
-
-        String leftPiece[] = values[3].split("=");
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(leftPiece[1]);
-        complexValue.setType(VariableType.BOOLEAN);
-        properties.put("leftPiece", complexValue);
-        logger.debug("leftPiece = " + leftPiece[1]);
-
-        String rightPiece[] = values[4].split("=");
-
-        complexValue = new ComplexValue();
-        complexValue.setValue(rightPiece[1]);
-        complexValue.setType(VariableType.BOOLEAN);
-        properties.put("rightPiece", complexValue);
-        logger.debug("rightPiece = " + rightPiece[1]);
-
-        SimpleEvent event = this.outputPort.createSimpleEvent(sensorId, timestamp, properties);
-        this.outputPort.publishSimpleEvent(event);
-        logger.debug("SimpleEvent = " + event.toString());
 
         scanner.close();
     }

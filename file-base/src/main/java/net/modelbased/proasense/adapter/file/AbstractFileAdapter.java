@@ -157,6 +157,7 @@ public abstract class AbstractFileAdapter extends AbstractBaseAdapter {
                         logger.debug("Directory " + file + " created.");
                     }
                     else if (file.isFile()) {
+                        Thread.sleep(fileDelay);
                         String suffix = FilenameUtils.getExtension(filepath);
                         if (suffix.equals("evt") || suffix.equals("xlsx") || suffix.equals("txt")) {
                             if (suffix.equals("txt")) {
